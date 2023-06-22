@@ -33,3 +33,9 @@ python3 -m http.server 8000
 ### Done
 
 Now visit http://localhost:8000/ on any browser!
+
+### Screenshot
+
+Trivial PDF viewer running on Chrome
+
+![Screenshot from 2023-06-22 14-22-17](https://github.com/hathibelagal-dev/TrivialPDFViewer/assets/42626106/94f3b98f-2ccc-4ed8-9fff-892b04144b7e)
