@@ -4,6 +4,13 @@ This is a very simple PDF viewer created using the [PDF.js](https://github.com/m
 
 The entire code is in one HTML document for easy readability. Feel free to create issues and PRs if you want to extend the scope/functionality of this little PDF viewer.
 
+Accepts two optional parameters through the query string:
+
+- **f** - Name of PDF file
+- **n** - Page number to show
+
+If these are not passed, it tries to show the first page of a file named **test.pdf**.
+
 ### Get Started
 
 ```bash

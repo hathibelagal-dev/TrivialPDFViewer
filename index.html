@@ -81,11 +81,23 @@
             });
         }
 
+        // If no URL params are passed, this page tries to
         // load a PDF called test.pdf and render its first page at scale 1
-        // update the name of the pdf and page number as necessary
-        pdfjsLib.getDocument('test.pdf').promise.then((pdf) => {
-            renderPage(pdf, 1, 1);
-        });
+        function start() {
+            let pdfFile = 'test.pdf';
+            let scale = 1;
+            let pageNumber = 1;
+            let params = new URLSearchParams(window.location.search.substring(1));
+            params.has("f") && (pdfFile = params.get("f"));
+            params.has("n") && (pageNumber = Math.abs(parseInt(params.get("n"))) || 1);
+            pdfjsLib.getDocument(pdfFile).promise.then((pdf) => {
+                if (pdf.numPages < pageNumber) {
+                    pageNumber = pdf.numPages;
+                }
+                renderPage(pdf, pageNumber, scale);
+            });
+        }
+        start();
     </script>
 </body>
 
