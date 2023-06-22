@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf_viewer.min.js"></script>
+</head>
+
+<body>
+    <style>
+        :root {
+            --scale-factor: 1;
+            /* This should match the scale you pass to renderPage()*/
+        }
+
+        body {
+            margin: 0;
+        }
+
+        #pdf-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #pdf-annotations {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #pdf-annotations section {
+            position: absolute;
+            cursor: pointer;
+            display: block;
+        }
+
+        #pdf-annotations section a {
+            height: 100%;
+            display: block;
+        }
+    </style>
+    <div id="pdf-viewer">
+        <canvas id="pdf-canvas" width="800" height="500"></canvas>
+        <div id="pdf-annotations"></div>
+    </div>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.worker.min.js';
+        const pdfViewer = document.querySelector("#pdf-viewer");
+        const canvas = document.querySelector("#pdf-canvas");
+        const annotationsContainer = document.querySelector("#pdf-annotations");
+        const context = canvas.getContext('2d');
+        const linkService = new pdfjsViewer.PDFLinkService({
+            externalLinkTarget: pdfjsViewer.LinkTarget.SELF
+        });
+
+        async function renderPage(pdf, pageNumber, scale) {
+            const page = await pdf.getPage(pageNumber);
+            const annotations = await page.getAnnotations();
+            if (!scale) scale = 1.0;
+            const viewport = page.getViewport({ scale: scale });
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            pdfViewer.style.width = canvas.width + "px";
+            pdfViewer.style.height = canvas.height + "px";
+            page.render({
+                canvasContext: context, viewport: viewport
+            });
+            annotationsContainer.style.left = canvas.offsetLeft + "px";
+            annotationsContainer.style.top = canvas.offsetRight + "px";
+            pdfjsLib.AnnotationLayer.render({
+                viewport: viewport.clone({ dontFlip: true }),
+                div: annotationsContainer,
+                annotations: annotations,
+                page: page,
+                linkService: linkService,
+            });
+        }
+
+        // load a PDF called test.pdf and render its first page at scale 1
+        // update the name of the pdf and page number as necessary
+        pdfjsLib.getDocument('test.pdf').promise.then((pdf) => {
+            renderPage(pdf, 1, 1);
+        });
+    </script>
+</body>
+
+</html>
