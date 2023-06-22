@@ -7,7 +7,7 @@ The entire code is in one HTML document for easy readability. Feel free to creat
 ### Get Started
 
 ```bash
-https://github.com/hathibelagal-dev/TrivialPDFViewer.git
+git clone https://github.com/hathibelagal-dev/TrivialPDFViewer.git
 cd TrivialPDFViewer
 ```
 
